@@ -1,9 +1,10 @@
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 
 const htmlfiles = fs.readdirSync("./pages", { withFileTypes: true }).map(file => file.name);
 
-const ccsfiles = fs.readdirSync("./styles", { withFileTypes: true }).map(file => file.name);
+const cssfiles = fs.readdirSync("./styles", { withFileTypes: true }).map(file => file.name);
 
 let homepage = '/';
 let aboutpage = '/about';
@@ -26,6 +27,8 @@ const server = http.createServer((req, res) => {
         servePage('./pages/about.html', res);
     } else if (req.url === contactpage) {
         servePage('./pages/contact-me.html', res);
+    } else if (req.url.startsWith('/styles/') && cssfiles.includes(path.basename(req.url))) {
+        serveStaticFile('.' + req.url, 'text/css', res);
     }
     else {
         // Handle 404 for other pages
@@ -48,4 +51,19 @@ function servePage(filePath, res) {
         }
     });
 }
-server.listen(3000, () => console.log('Server running on port 3000'));
+
+function serveStaticFile(filePath, contentType, res) {
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.write('404 Not Found');
+            res.end();
+        } else {
+            res.writeHead(200, { 'Content-Type': contentType });
+            res.write(data);
+            res.end();
+        }
+    });
+}
+
+server.listen(3000, () => console.log('Server running on port 3000'));``
