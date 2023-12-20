@@ -2,8 +2,6 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const htmlfiles = fs.readdirSync("./pages", { withFileTypes: true }).map(file => file.name);
-
 const cssfiles = fs.readdirSync("./styles", { withFileTypes: true }).map(file => file.name);
 
 let homepage = '/';
