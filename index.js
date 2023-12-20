@@ -1,3 +1,4 @@
+const e = require("express");
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -15,7 +16,7 @@ fs.readFile('./pages/404.html', (err, data) => {
   }
 });
 
-app.use(express.static('styles'));
+app.use(express.static('public'));
 
 router.get('/', (req, res) => {
   fs.readFile(homepage, (err, data) => {
